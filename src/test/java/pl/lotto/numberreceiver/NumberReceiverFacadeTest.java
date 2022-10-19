@@ -34,6 +34,13 @@ public class NumberReceiverFacadeTest {
     @Test
     @DisplayName("should return failed message when user gave more than six numbers")
     public void should_return_failed_message_when_user_gave_more_than_six_numbers() {
+        // given
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade();
+        List<Integer> numbersFromUser = List.of(1, 2, 3, 4, 5, 6, 7);
+        // when
+        NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
+        // then
+        assertThat(result.getMessage()).isEqualTo("failed");
     }
 
     @Test
