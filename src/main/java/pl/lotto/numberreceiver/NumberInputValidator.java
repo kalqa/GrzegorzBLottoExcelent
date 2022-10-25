@@ -51,13 +51,18 @@ class NumberInputValidator {
     }
 
     private boolean doesUserGaveNumbersInRange(List<Integer> numbers) {
-        for (int n : numbers) {
-            if (n < MIN_VALUE_IN_INPUT_NUMBERS_FROM_USER) {
-                return false;
-            } else if (n > MAX_VALUE_IN_INPUT_NUMBERS_FROM_USER) {
-                return false;
-            }
-        }
-        return true;
+        return numbers.stream()
+                .anyMatch(this::isNumberInRange);
+
+//        for (int n : numbers) {
+//            if (isNumberInRange(n)) {
+//                return false;
+//            }
+//        }
+//        return true;
+    }
+
+    private boolean isNumberInRange(int n) {
+        return n < MIN_VALUE_IN_INPUT_NUMBERS_FROM_USER || n > MAX_VALUE_IN_INPUT_NUMBERS_FROM_USER;
     }
 }
