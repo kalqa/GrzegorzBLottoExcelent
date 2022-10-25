@@ -12,6 +12,10 @@ public class NumberReceiverFacade {
         NumberInputValidator validator = new NumberInputValidator();
         if (!validator.doesUserGaveSixNumbers(size)) {
             return new NumberReceiverResultDto(FAILED_MESSAGE);
+        } else if (!validator.doesUserGaveVariousNumbers(numbersFromUser)) {
+            return new NumberReceiverResultDto(FAILED_MESSAGE);
+        } else if (!validator.doesUserGaveNumbersInRange(numbersFromUser)) {
+            return new NumberReceiverResultDto(FAILED_MESSAGE);
         }
         return new NumberReceiverResultDto(SUCCESS_MESSAGE);
     }
