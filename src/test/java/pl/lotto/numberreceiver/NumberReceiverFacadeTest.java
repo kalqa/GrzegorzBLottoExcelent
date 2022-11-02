@@ -6,8 +6,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.*;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -15,11 +15,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class NumberReceiverFacadeTest {
 
+    Clock clock = Clock.fixed(Instant.parse("2022-11-02T10:15:30.00Z"), ZoneId.of("Europe/Warsaw"));
+
     @Test
     @DisplayName("should return false when user gave six various numbers")
     public void should_return_false_when_user_gave_six_various_numbers() {
         // given
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock);
         List<Integer> numbersFromUser = List.of(1, 2, 3, 4, 5, 6);
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
@@ -31,7 +33,7 @@ public class NumberReceiverFacadeTest {
     @DisplayName("should return true when user gave less than six numbers")
     public void should_return_true_when_user_gave_less_than_six_numbers() {
         // given
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock);
         List<Integer> numbersFromUser = List.of(1, 2, 3);
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
@@ -44,7 +46,7 @@ public class NumberReceiverFacadeTest {
     @DisplayName("should return true when user gave more than six numbers")
     public void should_return_true_when_user_gave_more_than_six_numbers() {
         // given
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock);
         List<Integer> numbersFromUser = List.of(1, 2, 3, 4, 5, 6, 7);
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
@@ -57,7 +59,7 @@ public class NumberReceiverFacadeTest {
     @DisplayName("should return true when user gave same number")
     public void should_return_true_when_user_gave_same_number() {
         // given
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock);
         List<Integer> numbersFromUser = List.of(1, 1, 2, 3, 4, 5);
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
@@ -70,7 +72,7 @@ public class NumberReceiverFacadeTest {
     @DisplayName("should return true when user gave number out of range")
     public void should_return_true_when_user_gave_number_out_of_range() {
         // given
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock);
         List<Integer> numbersFromUser = List.of(1, 2, 3, 4, 5, 222);
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
@@ -83,7 +85,7 @@ public class NumberReceiverFacadeTest {
     @DisplayName("should return true and message with errors when user has made mistakes in input number")
     public void should_return_true_and_message_with_errors_when_user_has_made_mistakes_in_input_number() {
         // given
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock);
         List<Integer> numbersFromUser = List.of(1, 1, 3, 5, 222);
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
@@ -95,11 +97,12 @@ public class NumberReceiverFacadeTest {
     @ParameterizedTest
     @MethodSource("createLotteryTicketDay")
     @DisplayName("should return false and message with next draw date when user gave numbers")
-    public void should_return_false_and_message_with_next_draw_date_when_user_gave_numbers(LocalDateTime lotteryTicketDate) {
+    public void should_return_saturday_as_draw_date_when_today_is(LocalDateTime lotteryTicketDate) {
         // given
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests();
+        Clock clock = Clock.fixed(lotteryTicketDate.toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock);
         List<Integer> numbersFromUser = List.of(1, 2, 3, 4, 5, 6);
-        DrawDatesFinder.TICKET_DATE = lotteryTicketDate;
+//        DrawDatesFinder.ticketDate = lotteryTicketDate;
 
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
@@ -124,7 +127,7 @@ public class NumberReceiverFacadeTest {
     @DisplayName("should return false and message with lottery id when user gave number")
     public void should_return_false_and_message_with_lottery_id_when_user_gave_number() {
         // given
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock);
         List<Integer> numbersFromUser = List.of(1, 2, 3, 4, 5, 6);
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);

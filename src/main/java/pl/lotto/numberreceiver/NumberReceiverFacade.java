@@ -10,9 +10,13 @@ import static pl.lotto.numberreceiver.NumberReceiverResultDto.success;
 public class NumberReceiverFacade {
 
     private final NumberInputValidator validator;
+    private final DrawDatesFinder drawDatesFinder;
 
-    NumberReceiverFacade(NumberInputValidator validator) {
+    private final NumbersInputRepository repository;
+
+    public NumberReceiverFacade(NumberInputValidator validator, DrawDatesFinder drawDatesFinder) {
         this.validator = validator;
+        this.drawDatesFinder = drawDatesFinder;
     }
 
     public NumberReceiverResultDto inputNumbers(List<Integer> numbersFromUser) {
@@ -20,11 +24,13 @@ public class NumberReceiverFacade {
         if (validate.isError()) {
             return failure(validate.getMessage());
         }
-        LocalDateTime nearestDrawDate = DrawDatesFinder.upcomingDrawDate();
+        LocalDateTime nearestDrawDate = drawDatesFinder.upcomingDrawDate();
         UUID uuid = UUID.randomUUID();
         String userLotteryId = uuid.toString();
+        repository.save();
         return success(nearestDrawDate, userLotteryId);
     }
+
 
 
 }
