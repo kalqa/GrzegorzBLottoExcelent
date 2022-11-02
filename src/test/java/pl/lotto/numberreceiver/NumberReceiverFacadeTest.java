@@ -24,7 +24,7 @@ public class NumberReceiverFacadeTest {
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        assertThat(result.getError().isError()).isFalse();
+        assertThat(result.error()).isFalse();
     }
 
     @Test
@@ -36,8 +36,8 @@ public class NumberReceiverFacadeTest {
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        assertThat(result.getError().isError()).isTrue();
-        System.out.println(result.getError().getMessage());
+        assertThat(result.error()).isTrue();
+        System.out.println(result.message());
     }
 
     @Test
@@ -49,8 +49,8 @@ public class NumberReceiverFacadeTest {
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        assertThat(result.getError().isError()).isTrue();
-        System.out.println(result.getError().getMessage());
+        assertThat(result.error()).isTrue();
+        System.out.println(result.message());
     }
 
     @Test
@@ -62,8 +62,8 @@ public class NumberReceiverFacadeTest {
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        assertThat(result.getError().isError()).isTrue();
-        System.out.println(result.getError().getMessage());
+        assertThat(result.error()).isTrue();
+        System.out.println(result.message());
     }
 
     @Test
@@ -75,8 +75,8 @@ public class NumberReceiverFacadeTest {
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        assertThat(result.getError().isError()).isTrue();
-        System.out.println(result.getError().getMessage());
+        assertThat(result.error()).isTrue();
+        System.out.println(result.message());
     }
 
     @Test
@@ -88,8 +88,8 @@ public class NumberReceiverFacadeTest {
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
         // then
-        assertThat(result.getError().isError()).isTrue();
-        System.out.println(result.getError().getMessage());
+        assertThat(result.error()).isTrue();
+        System.out.println(result.message());
     }
 
     @ParameterizedTest
@@ -107,7 +107,7 @@ public class NumberReceiverFacadeTest {
 //        String upcomingDrewDateFormatted = DateTimeFormatter.ofPattern("EEEE dd-MM-yyyy").format(upcomingDrewDate);
 
         // then
-        assertThat(result.getError().isError()).isFalse();
+        assertThat(result.error()).isFalse();
 //        System.out.println(upcomingDrewDateFormatted);
     }
 
@@ -128,10 +128,10 @@ public class NumberReceiverFacadeTest {
         List<Integer> numbersFromUser = List.of(1, 2, 3, 4, 5, 6);
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
-        String userLotteryId = result.getUserLotteryId();
+        String userLotteryId = result.userLotteryId();
         // then
-        assertThat(result.getError().isError()).isFalse();
-        System.out.println(result.getUserLotteryId());
+        assertThat(result.error()).isFalse();
+        System.out.println(result.userLotteryId());
     }
 
 

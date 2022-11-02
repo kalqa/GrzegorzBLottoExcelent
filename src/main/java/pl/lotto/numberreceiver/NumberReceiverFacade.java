@@ -17,7 +17,7 @@ public class NumberReceiverFacade {
 
     public NumberReceiverResultDto inputNumbers(List<Integer> numbersFromUser) {
         NumberReciverInputError validate = validator.validate(numbersFromUser);
-        if (!validate.isError()) {
+        if (validate.isError()) {
             return failure(validate.getMessage());
         }
         LocalDateTime nearestDrawDate = DrawDatesFinder.upcomingDrawDate();

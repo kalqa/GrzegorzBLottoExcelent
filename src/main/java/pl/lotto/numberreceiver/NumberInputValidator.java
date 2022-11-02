@@ -23,10 +23,13 @@ class NumberInputValidator {
             validationErrors.add("numbers out off range");
         }
         String message = concatenateErrorMessage(validationErrors);
-        return NumberReciverInputError.builder()
-                .message(message)
-                .error(true)
-                .build();
+        if (!validationErrors.isEmpty()) {
+            return NumberReciverInputError.builder()
+                    .message(message)
+                    .error(true)
+                    .build();
+        }
+        return NumberReciverInputError.builder().build();
     }
 
     private boolean doesUserGaveSixNumbers(int size) {
@@ -34,7 +37,8 @@ class NumberInputValidator {
     }
 
     private boolean doesUserGaveVariousNumbers(List<Integer> numbers) {
-        return numbers.stream().allMatch(new HashSet<>()::add);
+        return numbers.stream()
+                .allMatch(new HashSet<>()::add);
     }
 
     private boolean doesUserGaveNumbersInRange(List<Integer> numbers) {
