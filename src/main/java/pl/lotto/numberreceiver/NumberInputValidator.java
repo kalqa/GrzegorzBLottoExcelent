@@ -3,7 +3,7 @@ package pl.lotto.numberreceiver;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 class NumberInputValidator {
     public static final int MAX_INPUT_NUMBERS_FROM_USER = 6;
@@ -12,7 +12,7 @@ class NumberInputValidator {
 
     List<String> validationErrors = new LinkedList<>();
 
-    public List<String> validate(List<Integer> numbersFromUser) {
+    public NumberReciverInputError validate(List<Integer> numbersFromUser) {
         if (!doesUserGaveSixNumbers(numbersFromUser.size())) {
             validationErrors.add("not have six numbers");
         }
@@ -22,7 +22,11 @@ class NumberInputValidator {
         if (!doesUserGaveNumbersInRange(numbersFromUser)) {
             validationErrors.add("numbers out off range");
         }
-        return validationErrors;
+        String message = concatenateErrorMessage(validationErrors);
+        return NumberReciverInputError.builder()
+                .message(message)
+                .error(true)
+                .build();
     }
 
     private boolean doesUserGaveSixNumbers(int size) {
@@ -40,5 +44,10 @@ class NumberInputValidator {
 
     private boolean isNumberOutOfRange(int n) {
         return n < MIN_VALUE_IN_INPUT_NUMBERS_FROM_USER || n > MAX_VALUE_IN_INPUT_NUMBERS_FROM_USER;
+    }
+
+    private String concatenateErrorMessage(List<String> messages) {
+        return messages.stream()
+                .collect(Collectors.joining(", ", "Input numbers error: ", ""));
     }
 }

@@ -1,7 +1,10 @@
 package pl.lotto.numberreceiver;
 
-public class NumberReciverInputError {
-    private boolean error;
+import lombok.Builder;
+
+@Builder
+class NumberReciverInputError {
+    private boolean error = true;
     private String message;
 
     NumberReciverInputError() {

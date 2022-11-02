@@ -103,12 +103,12 @@ public class NumberReceiverFacadeTest {
 
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
-        LocalDateTime upcomingDrewDate = result.getDrawTime();
-        String upcomingDrewDateFormatted = DateTimeFormatter.ofPattern("EEEE dd-MM-yyyy").format(upcomingDrewDate);
+//        LocalDateTime upcomingDrewDate = result.getDrawTime();
+//        String upcomingDrewDateFormatted = DateTimeFormatter.ofPattern("EEEE dd-MM-yyyy").format(upcomingDrewDate);
 
         // then
         assertThat(result.getError().isError()).isFalse();
-        System.out.println(upcomingDrewDateFormatted);
+//        System.out.println(upcomingDrewDateFormatted);
     }
 
     private static Stream<Arguments> createLotteryTicketDay() {
