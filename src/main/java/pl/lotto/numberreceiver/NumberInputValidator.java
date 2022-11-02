@@ -13,16 +13,15 @@ class NumberInputValidator {
     List<String> validationErrors = new LinkedList<>();
 
     public List<String> validate(List<Integer> numbersFromUser) {
-        if(doesUserGaveSixNumbers(numbersFromUser.size())){
+        if (!doesUserGaveSixNumbers(numbersFromUser.size())) {
             validationErrors.add("not have six numbers");
         }
-//        if(doesUserGaveSixNumbers(numbersFromUser)){
-//            validationErrors.add("not have six numbers");
-//        }
-//        if(doesUserGaveSixNumbers(numbersFromUser)){
-//            validationErrors.add("not have six numbers");
-//        }
-//        validationErrors.isEmpty();
+        if (!doesUserGaveVariousNumbers(numbersFromUser)) {
+            validationErrors.add("not have various numbers");
+        }
+        if (!doesUserGaveNumbersInRange(numbersFromUser)) {
+            validationErrors.add("numbers out off range");
+        }
         return validationErrors;
     }
 
@@ -31,38 +30,15 @@ class NumberInputValidator {
     }
 
     private boolean doesUserGaveVariousNumbers(List<Integer> numbers) {
-//        Set<Integer> setWithoutDuplicates = new HashSet<>();
-        List<Integer> integers = numbers.stream().distinct().toList();
-        return hasDuplicates(integers);
-//        if(integers.size() != 6){
-//            return false;
-//        }
-//        re
-//        for (int number : numbers) {
-//            if (!setWithoutDuplicates.add(number)) {
-//                return false;
-//            }
-//        }
-//        return true;
-    }
-
-    private boolean hasDuplicates(List<Integer> integers) {
-        return integers.size() == 6;
+        return numbers.stream().allMatch(new HashSet<>()::add);
     }
 
     private boolean doesUserGaveNumbersInRange(List<Integer> numbers) {
         return numbers.stream()
-                .anyMatch(this::isNumberInRange);
-
-//        for (int n : numbers) {
-//            if (isNumberInRange(n)) {
-//                return false;
-//            }
-//        }
-//        return true;
+                .noneMatch(this::isNumberOutOfRange);
     }
 
-    private boolean isNumberInRange(int n) {
+    private boolean isNumberOutOfRange(int n) {
         return n < MIN_VALUE_IN_INPUT_NUMBERS_FROM_USER || n > MAX_VALUE_IN_INPUT_NUMBERS_FROM_USER;
     }
 }

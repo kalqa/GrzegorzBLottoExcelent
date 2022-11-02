@@ -5,4 +5,7 @@ public class NumberReceiverFacadeConfiguration {
         NumberInputValidator validator = new NumberInputValidator();
         return new NumberReceiverFacade(validator);
     }
+
+
+
 }

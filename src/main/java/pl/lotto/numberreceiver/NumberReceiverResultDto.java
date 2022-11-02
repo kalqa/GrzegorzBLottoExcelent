@@ -3,18 +3,38 @@ package pl.lotto.numberreceiver;
 import java.time.LocalDateTime;
 
 public class NumberReceiverResultDto {
-    String message;
-    LocalDateTime drawTime;
 
-    NumberReceiverResultDto(String message, LocalDateTime now) {
-        this.message = message;
+    private NumberReciverInputError error;
+    private LocalDateTime drawTime;
+    private String userLotteryId;
+
+    public NumberReceiverResultDto(NumberReciverInputError error, LocalDateTime drawTime, String userLotteryId) {
+        this.error = error;
+        this.drawTime = drawTime;
+        this.userLotteryId = userLotteryId;
     }
 
-    String getMessage() {
-        return message;
+    public NumberReceiverResultDto(NumberReciverInputError error) {
+        this.error = error;
     }
 
     LocalDateTime getDrawTime() {
         return drawTime;
+    }
+
+    NumberReciverInputError getError() {
+        return error;
+    }
+
+    void setError(NumberReciverInputError error) {
+        this.error = error;
+    }
+
+    public String getUserLotteryId() {
+        return userLotteryId;
+    }
+
+    public void setUserLotteryId(String userLotteryId) {
+        this.userLotteryId = userLotteryId;
     }
 }
