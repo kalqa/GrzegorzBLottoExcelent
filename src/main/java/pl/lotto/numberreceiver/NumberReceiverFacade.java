@@ -1,11 +1,14 @@
 package pl.lotto.numberreceiver;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
-import static pl.lotto.numberreceiver.NumberReceiverResultDto.failure;
-import static pl.lotto.numberreceiver.NumberReceiverResultDto.success;
+import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.numberreceiver.dto.TicketsForGivenDateDto;
+import static java.util.Collections.emptyList;
+import static pl.lotto.numberreceiver.dto.NumberReceiverResultDto.failure;
+import static pl.lotto.numberreceiver.dto.NumberReceiverResultDto.success;
 
 public class NumberReceiverFacade {
 
@@ -14,9 +17,10 @@ public class NumberReceiverFacade {
 
     private final NumbersInputRepository repository;
 
-    public NumberReceiverFacade(NumberInputValidator validator, DrawDatesFinder drawDatesFinder) {
+    NumberReceiverFacade(NumberInputValidator validator, DrawDatesFinder drawDatesFinder, NumbersInputRepository repository) {
         this.validator = validator;
         this.drawDatesFinder = drawDatesFinder;
+        this.repository = repository;
     }
 
     public NumberReceiverResultDto inputNumbers(List<Integer> numbersFromUser) {
@@ -27,10 +31,10 @@ public class NumberReceiverFacade {
         LocalDateTime nearestDrawDate = drawDatesFinder.upcomingDrawDate();
         UUID uuid = UUID.randomUUID();
         String userLotteryId = uuid.toString();
-        repository.save();
+        LotteryTicket lotteryTicket = new LotteryTicket(uuid, nearestDrawDate, numbersFromUser);
+        repository.save(lotteryTicket);
         return success(nearestDrawDate, userLotteryId);
     }
-
 
 
 }
