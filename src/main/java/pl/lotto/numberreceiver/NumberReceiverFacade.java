@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.UUID;
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
 import pl.lotto.numberreceiver.dto.TicketsForGivenDateDto;
-import static java.util.Collections.emptyList;
 import static pl.lotto.numberreceiver.dto.NumberReceiverResultDto.failure;
 import static pl.lotto.numberreceiver.dto.NumberReceiverResultDto.success;
 
@@ -37,4 +36,7 @@ public class NumberReceiverFacade {
     }
 
 
+    TicketsForGivenDateDto retrieveAllNumbersForGivenDate(LocalDateTime date) {
+        return new TicketsForGivenDateDto(Collections.emptyList());
+    }
 }
