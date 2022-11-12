@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class NumberReceiverFacadeTest {
 
-    Clock clock = Clock.fixed(Instant.parse("2022-11-02T10:15:30.00Z"), ZoneId.of("Europe/Warsaw"));
+    Clock clock = Clock.fixed(Instant.parse("2022-11-11T10:15:30.00Z"), ZoneId.of("Europe/Warsaw"));
     NumbersInputRepositoryTestImpl repository = new NumbersInputRepositoryTestImpl();
 
     @Test
@@ -106,16 +106,11 @@ public class NumberReceiverFacadeTest {
         Clock clock = Clock.fixed(lotteryTicketDate.toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, repository);
         List<Integer> numbersFromUser = List.of(1, 2, 3, 4, 5, 6);
-//        DrawDatesFinder.ticketDate = lotteryTicketDate;
-
         // when
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
-//        LocalDateTime upcomingDrewDate = result.getDrawTime();
-//        String upcomingDrewDateFormatted = DateTimeFormatter.ofPattern("EEEE dd-MM-yyyy").format(upcomingDrewDate);
-
         // then
         assertThat(result.error()).isFalse();
-//        System.out.println(upcomingDrewDateFormatted);
+        System.out.println(result.drawTime());
     }
 
     private static Stream<Arguments> createLotteryTicketDay() {
@@ -140,21 +135,22 @@ public class NumberReceiverFacadeTest {
         assertThat(result.userLotteryId()).isNotEmpty();
     }
 
-
     @Test
+    @DisplayName("should return all numbers from all users when draw date was given")
     public void should_return_all_numbers_from_all_users_when_draw_date_was_given() {
         // given
-        Clock clock = Clock.fixed(LocalDateTime.of(2022, 10, 17, 11, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        Clock clock = Clock.fixed(LocalDateTime.of(2022, 11, 9, 11, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
         NumbersInputRepositoryTestImpl repository = new NumbersInputRepositoryTestImpl();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, repository);
+
         numberReceiverFacade.inputNumbers(List.of(1, 2, 3, 4, 5, 6));
-        LocalDateTime date = LocalDateTime.of(2022, 10, 17, 11, 0);
+
+        LocalDateTime date = LocalDateTime.of(2022, 11, 12, 12, 0);
         // when
         TicketsForGivenDateDto result = numberReceiverFacade.retrieveAllNumbersForGivenDate(date);
         // then
-        TicketsForGivenDateDto expected = new TicketsForGivenDateDto(
-                List.of(List.of(1, 2, 3, 4, 5, 6))
-        );
+        TicketsForGivenDateDto expected = repository.findAllByDate(date);
+
         assertThat(result).isEqualTo(expected);
     }
 

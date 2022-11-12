@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
 import pl.lotto.numberreceiver.dto.TicketsForGivenDateDto;
 import static pl.lotto.numberreceiver.dto.NumberReceiverResultDto.failure;
@@ -13,7 +15,6 @@ public class NumberReceiverFacade {
 
     private final NumberInputValidator validator;
     private final DrawDatesFinder drawDatesFinder;
-
     private final NumbersInputRepository repository;
 
     NumberReceiverFacade(NumberInputValidator validator, DrawDatesFinder drawDatesFinder, NumbersInputRepository repository) {
@@ -35,8 +36,8 @@ public class NumberReceiverFacade {
         return success(nearestDrawDate, userLotteryId);
     }
 
-
     TicketsForGivenDateDto retrieveAllNumbersForGivenDate(LocalDateTime date) {
-        return new TicketsForGivenDateDto(Collections.emptyList());
+
+        return repository.findAllByDate(date);
     }
 }
