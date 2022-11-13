@@ -22,11 +22,12 @@ public class NumbersGeneratorFacadeTest {
     public void should_return_generated_numbers_on_specific_day(LocalDateTime lotteryDate) {
         //given
         Clock clock = Clock.fixed(lotteryDate.toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
-        NumbersGeneratorFacade numbersGeneratorFacade = new NumbersGeneratorFacadeConfiguration().createModuleForTests(clock);
+        NumbersGeneratorRepositoryTestImpl repositoryTest = new NumbersGeneratorRepositoryTestImpl();
+        NumbersGeneratorFacade numbersGeneratorFacade = new NumbersGeneratorFacadeConfiguration().createModuleForTests(clock, repositoryTest);
         //when
-        NumbersGeneratorResultDto winningNumbers = numbersGeneratorFacade.winningNumbers();
+        NumbersGeneratorResultDto winningNumbers = numbersGeneratorFacade.generateNumbers();
         //then
-        System.out.println(winningNumbers.drawDate() + " " + winningNumbers.numbers());
+//        System.out.println(winningNumbers.drawDate() + " " + winningNumbers.numbers());
         assertThat(winningNumbers.numbers()).isNotEmpty();
     }
 

@@ -1,7 +1,5 @@
 package numbersgenerator;
 
-import numbersgenerator.dto.NumbersGeneratorResultDto;
-
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -19,8 +17,8 @@ class Draw {
         this.clock = clock;
     }
 
-    NumbersGeneratorResultDto startDrew() {
-            return new NumbersGeneratorResultDto(LocalDateTime.now(clock).minusHours(1), generateNumbers());
+    WinningNumbers startDrew() {
+            return new WinningNumbers(LocalDateTime.now(clock).minusHours(1), generateNumbers());
     }
 
     private List<Integer> generateNumbers() {
