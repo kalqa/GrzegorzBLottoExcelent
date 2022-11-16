@@ -21,13 +21,13 @@ public class NumbersGeneratorFacadeTest {
     @DisplayName("should return generated numbers on specific day")
     public void should_return_generated_numbers_on_specific_day(LocalDateTime lotteryDate) {
         //given
-        Clock clock = Clock.fixed(lotteryDate.toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        Clock clock = Clock.fixed(lotteryDate.toInstant(ZoneOffset.of("Europe/Warsaw")), ZoneId.of("Europe/Warsaw"));
         NumbersGeneratorRepositoryTestImpl repositoryTest = new NumbersGeneratorRepositoryTestImpl();
         NumbersGeneratorFacade numbersGeneratorFacade = new NumbersGeneratorFacadeConfiguration().createModuleForTests(clock, repositoryTest);
         //when
         NumbersGeneratorResultDto winningNumbers = numbersGeneratorFacade.generateNumbers();
         //then
-//        System.out.println(winningNumbers.drawDate() + " " + winningNumbers.numbers());
+        System.out.println(winningNumbers.drawDate() + " " + winningNumbers.numbers());
         assertThat(winningNumbers.numbers()).isNotEmpty();
     }
 

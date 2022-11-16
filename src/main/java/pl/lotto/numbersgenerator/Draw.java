@@ -16,7 +16,7 @@ class Draw {
     }
 
     WinningNumbers startDrew() {
-        return new WinningNumbers(LocalDateTime.now(clock).minusHours(1), generateNumbers());
+        return new WinningNumbers(LocalDateTime.now(clock), generateNumbers());
     }
 
     private List<Integer> generateNumbers() {

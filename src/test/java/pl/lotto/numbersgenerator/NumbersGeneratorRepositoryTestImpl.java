@@ -23,11 +23,6 @@ public class NumbersGeneratorRepositoryTestImpl implements NumbersGeneratorRepos
         return winningNumbers;
     }
 
-
-
-
-
-
     @Override
     public List<WinningNumbers> findAll() {
         return null;

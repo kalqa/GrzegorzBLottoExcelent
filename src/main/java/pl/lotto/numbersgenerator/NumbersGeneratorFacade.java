@@ -1,6 +1,7 @@
 package pl.lotto.numbersgenerator;
-import pl.lotto.numbersgenerator.dto.NumbersGeneratorResultDto;
+
 import java.util.List;
+import pl.lotto.numbersgenerator.dto.NumbersGeneratorResultDto;
 
 public class NumbersGeneratorFacade {
 

@@ -136,22 +136,33 @@ public class NumberReceiverFacadeTest {
     }
 
     @Test
-    @DisplayName("should return all numbers from all users when draw date was given")
-    public void should_return_all_numbers_from_all_users_when_draw_date_was_given() {
+    public void should_return_saturday_draw_date_when_today_is_wednesday() {
         // given
-        Clock clock = Clock.fixed(LocalDateTime.of(2022, 11, 9, 11, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        Instant fixedInstant = LocalDateTime.of(2022, 11, 16, 11, 0).toInstant(ZoneOffset.UTC);
+        Clock clock = Clock.fixed(fixedInstant, ZoneId.systemDefault());
         NumbersInputRepositoryTestImpl repository = new NumbersInputRepositoryTestImpl();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, repository);
+        // when
+        NumberReceiverResultDto numberReceiverResultDto = numberReceiverFacade.inputNumbers(List.of(1, 2, 3, 4, 5, 6));
+        // then
+        Instant expected = LocalDateTime.of(2022, 11, 19, 12, 0).toInstant(ZoneOffset.UTC);
+        assertThat(numberReceiverResultDto.drawTime().toInstant(ZoneOffset.UTC)).isEqualTo(expected);
+    }
 
-        numberReceiverFacade.inputNumbers(List.of(1, 2, 3, 4, 5, 6));
-
-        LocalDateTime date = LocalDateTime.of(2022, 11, 12, 12, 0);
+    @Test
+    public void should_return_all_numbers_from_all_users_when_draw_date_was_given() {
+        // given
+        Clock clock = Clock.fixed(LocalDateTime.of(2022, 11, 16, 11, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        NumbersInputRepositoryTestImpl repository = new NumbersInputRepositoryTestImpl();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, repository);
+        List<Integer> numbersFromUser = List.of(1, 2, 3, 4, 5, 6);
+        numberReceiverFacade.inputNumbers(numbersFromUser);
+        LocalDateTime date = LocalDateTime.of(2022, 11, 19, 12, 0);
         // when
         TicketsForGivenDateDto result = numberReceiverFacade.retrieveAllNumbersForGivenDate(date);
         // then
-        TicketsForGivenDateDto expected = repository.findAllByDate(date);
-
-        assertThat(result).isEqualTo(expected);
+        List<List<Integer>> expectedNumbersFromUsers = List.of(List.of(1, 2, 3, 4, 5, 6));
+        assertThat(result.allUsersNumbers()).isEqualTo(expectedNumbersFromUsers);
     }
 
 }
