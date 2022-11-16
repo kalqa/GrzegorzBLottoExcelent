@@ -1,13 +1,12 @@
 package pl.lotto.numberreceiver;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
 import pl.lotto.numberreceiver.dto.TicketsForGivenDateDto;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
 import static pl.lotto.numberreceiver.dto.NumberReceiverResultDto.failure;
 import static pl.lotto.numberreceiver.dto.NumberReceiverResultDto.success;
 
@@ -37,7 +36,6 @@ public class NumberReceiverFacade {
     }
 
     TicketsForGivenDateDto retrieveAllNumbersForGivenDate(LocalDateTime date) {
-
         return repository.findAllByDate(date);
     }
 }

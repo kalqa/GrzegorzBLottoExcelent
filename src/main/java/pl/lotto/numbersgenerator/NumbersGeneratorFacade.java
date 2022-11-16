@@ -1,26 +1,26 @@
-package numbersgenerator;
-
-import numbersgenerator.dto.NumbersGeneratorResultDto;
-
+package pl.lotto.numbersgenerator;
+import pl.lotto.numbersgenerator.dto.NumbersGeneratorResultDto;
+import java.util.List;
 
 public class NumbersGeneratorFacade {
 
     private final Draw draw;
     private final NumbersGeneratorRepository numbersGeneratorRepository;
 
-    WinningNumbers winningNumbers;
-
     NumbersGeneratorFacade(Draw draw, NumbersGeneratorRepository numbersGeneratorRepository) {
         this.draw = draw;
         this.numbersGeneratorRepository = numbersGeneratorRepository;
+
     }
 
     NumbersGeneratorResultDto generateNumbers() {
-        winningNumbers = draw.startDrew();
+        WinningNumbers winningNumbers = draw.startDrew();
         numbersGeneratorRepository.save(winningNumbers);
-        return new NumbersGeneratorResultDto(winningNumbers.date, winningNumbers.numbers);
+        return new NumbersGeneratorResultDto(winningNumbers.getDate(), winningNumbers.getNumbers());
     }
 
-
+    List<WinningNumbers> getWinningNumbers() {
+        return numbersGeneratorRepository.findAll();
+    }
 }
 
