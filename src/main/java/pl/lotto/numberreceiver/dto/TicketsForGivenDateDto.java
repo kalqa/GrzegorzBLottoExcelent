@@ -1,7 +1,8 @@
 package pl.lotto.numberreceiver.dto;
 
 import java.util.List;
+import java.util.UUID;
 
-public record TicketsForGivenDateDto(List<List<Integer>> allUsersNumbers) {
+public record TicketsForGivenDateDto(UUID uuid, List<Integer> userNumbers) {
 
 }

@@ -34,6 +34,16 @@ public class NumbersGeneratorRepositoryTestImpl implements NumbersGeneratorRepos
     }
 
     @Override
+    public <S extends WinningNumbers> S insert(S entity) {
+        return null;
+    }
+
+    @Override
+    public <S extends WinningNumbers> List<S> insert(Iterable<S> entities) {
+        return null;
+    }
+
+    @Override
     public Page<WinningNumbers> findAll(Pageable pageable) {
         return null;
     }

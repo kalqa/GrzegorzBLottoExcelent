@@ -1,14 +1,19 @@
 package pl.lotto.numberreceiver;
 
-import pl.lotto.numberreceiver.dto.TicketsForGivenDateDto;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
-public interface NumbersInputRepository {
+@Repository
+public interface NumbersInputRepository extends MongoRepository<LotteryTicket, UUID> {
 
-    void save(LotteryTicket lotteryTicket);
+    LotteryTicket save(LotteryTicket lotteryTicket);
 
-    TicketsForGivenDateDto findAllByDate(LocalDateTime date);
+    List<LotteryTicket> findAllByNearestDrawDate(LocalDateTime nearestDrawDate);
 
-    TicketsForGivenDateDto findAll();
+    List<LotteryTicket> findAll();
+
 }

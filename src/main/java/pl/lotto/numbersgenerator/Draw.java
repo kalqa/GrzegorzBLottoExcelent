@@ -31,26 +31,4 @@ class Draw {
                 .toList();
     }
 
-    //    private void drawSchedule() {
-    //        Date alarmTime = createTimer();
-    //        Timer timer = new Timer();
-    //
-    //        timer.schedule(new TimerTask() {
-    //            @Override
-    //            public void run() {
-    //                generateNumbers();
-    //            }
-    //        }, alarmTime);
-    //    }
-    //
-    //    Date createTimer() {
-    //        Calendar calendar = Calendar.getInstance();
-    //        calendar.set(Calendar.DAY_OF_WEEK, drawDate.getDayOfWeek().getValue());
-    //        calendar.set(Calendar.HOUR_OF_DAY, drawDate.getHour());
-    //        calendar.set(Calendar.MINUTE, drawDate.getMinute());
-    //        calendar.set(Calendar.SECOND, drawDate.getSecond());
-    //        return calendar.getTime();
-    //    }
-
-
 }

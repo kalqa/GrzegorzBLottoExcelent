@@ -1,6 +1,7 @@
 package pl.lotto.numberreceiver;
 
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.numberreceiver.dto.TicketDto;
 import pl.lotto.numberreceiver.dto.TicketsForGivenDateDto;
 
 import java.time.LocalDateTime;
@@ -35,7 +36,26 @@ public class NumberReceiverFacade {
         return success(nearestDrawDate, userLotteryId);
     }
 
-    TicketsForGivenDateDto retrieveAllNumbersForGivenDate(LocalDateTime date) {
-        return repository.findAllByDate(date);
+    public List<List<Integer>> retrieveAllNumbersForGivenDate(LocalDateTime date) {
+        List<LotteryTicket> result = repository.findAllByNearestDrawDate(date);
+        return result.stream()
+                .map(lotteryTicket -> lotteryTicket.numbersFromUser)
+                .toList();
     }
+
+    public List<TicketsForGivenDateDto> retrieveAllTicketForGivenDate(LocalDateTime date) {
+        return repository.findAllByNearestDrawDate(date)
+                .stream()
+                .map(LotteryTicket -> new TicketsForGivenDateDto(LotteryTicket.uuid, LotteryTicket.numbersFromUser))
+                .toList();
+    }
+
+    public List<TicketDto> retrieveAllTicket() {
+        return repository.findAll()
+                .stream()
+                .map(LotteryTicket -> new TicketDto(LotteryTicket.uuid, LotteryTicket.nearestDrawDate, LotteryTicket.numbersFromUser))
+                .toList();
+    }
+
+
 }

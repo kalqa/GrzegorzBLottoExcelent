@@ -1,6 +1,7 @@
 package pl.lotto.numbersgenerator;
 
 import java.util.List;
+
 import pl.lotto.numbersgenerator.dto.NumbersGeneratorResultDto;
 
 public class NumbersGeneratorFacade {
@@ -20,8 +21,11 @@ public class NumbersGeneratorFacade {
         return new NumbersGeneratorResultDto(winningNumbers.getDate(), winningNumbers.getNumbers());
     }
 
-    List<WinningNumbers> getWinningNumbers() {
-        return numbersGeneratorRepository.findAll();
+    public List<NumbersGeneratorResultDto> getWinningNumbers() {
+        List<WinningNumbers> winningNumbers = numbersGeneratorRepository.findAll();
+        return winningNumbers.stream()
+                .map(WinningNumbers -> new NumbersGeneratorResultDto(WinningNumbers.getDate(), WinningNumbers.getNumbers()))
+                .toList();
     }
 }
 

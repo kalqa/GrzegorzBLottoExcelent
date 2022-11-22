@@ -1,19 +1,18 @@
 package pl.lotto.numberreceiver;
 
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.List;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.numberreceiver.dto.TicketDto;
 import pl.lotto.numberreceiver.dto.TicketsForGivenDateDto;
+
+import java.time.*;
+import java.util.List;
+import java.util.stream.Stream;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class NumberReceiverFacadeTest {
@@ -159,10 +158,41 @@ public class NumberReceiverFacadeTest {
         numberReceiverFacade.inputNumbers(numbersFromUser);
         LocalDateTime date = LocalDateTime.of(2022, 11, 19, 12, 0);
         // when
-        TicketsForGivenDateDto result = numberReceiverFacade.retrieveAllNumbersForGivenDate(date);
+        List<List<Integer>> result = numberReceiverFacade.retrieveAllNumbersForGivenDate(date);
         // then
         List<List<Integer>> expectedNumbersFromUsers = List.of(List.of(1, 2, 3, 4, 5, 6));
-        assertThat(result.allUsersNumbers()).isEqualTo(expectedNumbersFromUsers);
+        assertThat(result).isEqualTo(expectedNumbersFromUsers);
     }
+
+    @Test
+    public void should_return_all_ticket_when_draw_date_was_given(){
+        // given
+        Clock clock = Clock.fixed(LocalDateTime.of(2022, 11, 16, 11, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        NumbersInputRepositoryTestImpl repository = new NumbersInputRepositoryTestImpl();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, repository);
+        List<Integer> numbersFromUser = List.of(1, 2, 3, 4, 5, 6);
+        numberReceiverFacade.inputNumbers(numbersFromUser);
+        LocalDateTime date = LocalDateTime.of(2022, 11, 19, 12, 0);
+        // when
+        List<TicketsForGivenDateDto> result = numberReceiverFacade.retrieveAllTicketForGivenDate(date);
+        // then
+        assertThat(result).isNotEmpty();
+    }
+
+    @Test
+    public void should_return_all_ticket(){
+        // given
+        Clock clock = Clock.fixed(LocalDateTime.of(2022, 11, 16, 11, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+        NumbersInputRepositoryTestImpl repository = new NumbersInputRepositoryTestImpl();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacadeConfiguration().createModuleForTests(clock, repository);
+        List<Integer> numbersFromUser = List.of(1, 2, 3, 4, 5, 6);
+        numberReceiverFacade.inputNumbers(numbersFromUser);
+        // when
+        List<TicketDto> result = numberReceiverFacade.retrieveAllTicket();
+        // then
+        assertThat(result).isNotEmpty();
+    }
+
+
 
 }

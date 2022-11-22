@@ -1,5 +1,6 @@
 package pl.lotto.numbersgenerator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,14 +16,15 @@ import java.util.List;
 class WinningNumbersController {
     Clock clock = Clock.fixed(LocalDateTime.of(2022, 11, 5, 12, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
     Draw draw = new Draw(clock);
-    final NumbersGeneratorRepository numbersGeneratorRepository;
 
+    private NumbersGeneratorRepository numbersGeneratorRepository;
+    @Autowired
     public WinningNumbersController(NumbersGeneratorRepository numbersGeneratorRepository) {
         this.numbersGeneratorRepository = numbersGeneratorRepository;
     }
 
     @GetMapping("/winningNumbers")
-    public List<WinningNumbers> getWinningNumbers() {
+    public List<NumbersGeneratorResultDto> getWinningNumbers() {
         NumbersGeneratorFacade numbersGeneratorFacade = new NumbersGeneratorFacade(draw, numbersGeneratorRepository);
         return numbersGeneratorFacade.getWinningNumbers();
     }
