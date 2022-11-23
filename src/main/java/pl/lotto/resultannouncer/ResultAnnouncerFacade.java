@@ -4,6 +4,7 @@ import pl.lotto.resultannouncer.dto.ResultAnnouncerDto;
 import pl.lotto.resultchecker.ResultCheckerFacade;
 
 import java.util.UUID;
+import pl.lotto.resultchecker.TicketResult;
 
 public class ResultAnnouncerFacade {
 
@@ -14,7 +15,8 @@ public class ResultAnnouncerFacade {
     }
 
     public ResultAnnouncerDto checkTicket(UUID id) {
-        return ResultAnnouncerMessage.summaryMessage(resultCheckerFacade.checkWinningsForGivenTicketId(id));
+        TicketResult ticketResult = resultCheckerFacade.checkWinningsForGivenTicketId(id);
+        return ResultAnnouncerMessage.summaryMessage(ticketResult);
 
     }
 

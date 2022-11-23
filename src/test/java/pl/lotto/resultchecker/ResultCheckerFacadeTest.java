@@ -39,7 +39,7 @@ public class ResultCheckerFacadeTest {
         when(receiverFacade.retrieveAllTicket()).thenReturn(ticketList);
 
         // when
-        ResultCheckerFacade facade = new ResultCheckerFacade(generator, receiverFacade, repository);
+        ResultCheckerFacade facade = new ResultCheckerFacade(generator, receiverFacade, repository, new LotteryTicketChecker());
         List<TicketResult> result = facade.checkAllWinnings();
 
         //then

@@ -12,11 +12,11 @@ import static java.util.stream.Collectors.toList;
 class LotteryTicketChecker {
 
 
-    static List<TicketResult> checkAllTicket(List<NumbersGeneratorResultDto> draws, List<TicketDto> tickets) {
+    List<TicketResult> checkAllTicket(List<NumbersGeneratorResultDto> winningNumbers, List<TicketDto> ticketsFromUsers) {
         List<TicketResult> ticketResultDto = new ArrayList<>();
-        for (TicketDto ticket : tickets) {
+        for (TicketDto ticket : ticketsFromUsers) {
             LocalDateTime ticketDate = ticket.drawDate();
-            for (NumbersGeneratorResultDto draw : draws) {
+            for (NumbersGeneratorResultDto draw : winningNumbers) {
                 if (ticketDate.isEqual(draw.drawDate())) {
                     List<Integer> common = ticket.numbers()
                             .stream()

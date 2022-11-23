@@ -99,51 +99,6 @@ public class NumbersGeneratorRepositoryTestImpl implements NumbersGeneratorRepos
     }
 
     @Override
-    public void flush() {
-
-    }
-
-    @Override
-    public <S extends WinningNumbers> S saveAndFlush(S entity) {
-        return null;
-    }
-
-    @Override
-    public <S extends WinningNumbers> List<S> saveAllAndFlush(Iterable<S> entities) {
-        return null;
-    }
-
-    @Override
-    public void deleteAllInBatch(Iterable<WinningNumbers> entities) {
-
-    }
-
-    @Override
-    public void deleteAllByIdInBatch(Iterable<Long> longs) {
-
-    }
-
-    @Override
-    public void deleteAllInBatch() {
-
-    }
-
-    @Override
-    public WinningNumbers getOne(Long aLong) {
-        return null;
-    }
-
-    @Override
-    public WinningNumbers getById(Long aLong) {
-        return null;
-    }
-
-    @Override
-    public WinningNumbers getReferenceById(Long aLong) {
-        return null;
-    }
-
-    @Override
     public <S extends WinningNumbers> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }

@@ -14,17 +14,19 @@ public class ResultCheckerFacade {
     NumbersGeneratorFacade generator;
     NumberReceiverFacade receiverFacade;
     ResultCheckerRepository repository;
+    LotteryTicketChecker lotteryTicketChecker;
 
-    ResultCheckerFacade(NumbersGeneratorFacade generator, NumberReceiverFacade receiverFacade, ResultCheckerRepository repository) {
+    ResultCheckerFacade(NumbersGeneratorFacade generator, NumberReceiverFacade receiverFacade, ResultCheckerRepository repository, LotteryTicketChecker lotteryTicketChecker) {
         this.generator = generator;
         this.receiverFacade = receiverFacade;
         this.repository = repository;
+        this.lotteryTicketChecker = lotteryTicketChecker;
     }
 
     public List<TicketResult> checkAllWinnings() {
         List<NumbersGeneratorResultDto> draws = generator.getWinningNumbers();
         List<TicketDto> tickets = receiverFacade.retrieveAllTicket();
-        List<TicketResult> list = LotteryTicketChecker.checkAllTicket(draws, tickets);
+        List<TicketResult> list = lotteryTicketChecker.checkAllTicket(draws, tickets);
         repository.insertAll(list);
         return list;
     }
