@@ -16,4 +16,5 @@ public interface NumbersInputRepository extends MongoRepository<LotteryTicket, U
 
     List<LotteryTicket> findAll();
 
+
 }

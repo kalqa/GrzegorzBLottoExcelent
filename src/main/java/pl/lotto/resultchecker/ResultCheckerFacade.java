@@ -7,6 +7,7 @@ import pl.lotto.numbersgenerator.dto.NumbersGeneratorResultDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class ResultCheckerFacade {
@@ -32,7 +33,11 @@ public class ResultCheckerFacade {
     }
 
     public List<TicketResult> checkWinningsForGivenDate(LocalDateTime date) {
-        return repository.findAllByDate(date);
+        NumbersGeneratorResultDto draw = generator.getWinningNumbersByDate(date);
+        List<TicketDto> tickets = receiverFacade.retrieveAllTicket();
+        List<TicketResult> list = lotteryTicketChecker.checkAllTicketOnGivenDate(draw, tickets);
+        repository.insertAll(list);
+        return list;
     }
 
     public TicketResult checkWinningsForGivenTicketId(UUID id) {

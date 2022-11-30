@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Document
-class LotteryTicket {
+public class LotteryTicket {
 
     @Id
     UUID uuid;

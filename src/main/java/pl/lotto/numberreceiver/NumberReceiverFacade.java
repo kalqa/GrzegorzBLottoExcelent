@@ -1,6 +1,5 @@
 package pl.lotto.numberreceiver;
 
-import org.springframework.stereotype.Component;
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
 import pl.lotto.numberreceiver.dto.TicketDto;
 import pl.lotto.numberreceiver.dto.TicketsForGivenDateDto;

@@ -24,23 +24,23 @@ public class ResultCheckerFacadeTest {
 
         // Draw numbers and date
         List<Integer> winningNumbers = List.of(1, 20, 31, 42, 53, 64);
-        LocalDateTime drawDate = LocalDateTime.of(2022, 11, 19, 12, 0);
-        List<NumbersGeneratorResultDto> drawList = List.of(new NumbersGeneratorResultDto(drawDate, winningNumbers));
+        LocalDateTime drawDate = LocalDateTime.of(2022, 11, 19, 11, 0);
+        NumbersGeneratorResultDto draw = new NumbersGeneratorResultDto(drawDate, winningNumbers);
 
-        when(generator.getWinningNumbers()).thenReturn(drawList);
+        when(generator.getWinningNumbersByDate(drawDate)).thenReturn(draw);
 
         // Users lottery tickets
         NumberReceiverFacade receiverFacade = Mockito.mock(NumberReceiverFacade.class);
         UUID uuid = UUID.randomUUID();
         List<Integer> userNumbers = List.of(1, 2, 31, 4, 53, 64);
-        LocalDateTime ticketDate = LocalDateTime.of(2022, 11, 19, 12, 0);
+        LocalDateTime ticketDate = LocalDateTime.of(2022, 11, 19, 11, 0);
 
         List<TicketDto> ticketList = List.of(new TicketDto(uuid, ticketDate, userNumbers));
         when(receiverFacade.retrieveAllTicket()).thenReturn(ticketList);
 
         // when
         ResultCheckerFacade facade = new ResultCheckerFacade(generator, receiverFacade, repository, new LotteryTicketChecker());
-        List<TicketResult> result = facade.checkAllWinnings();
+        List<TicketResult> result = facade.checkWinningsForGivenDate(drawDate);
 
         //then
         assertThat(result.get(0).getHitNumbers().size()).isEqualTo(4);

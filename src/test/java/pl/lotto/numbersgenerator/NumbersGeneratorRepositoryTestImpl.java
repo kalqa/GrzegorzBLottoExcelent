@@ -29,6 +29,11 @@ public class NumbersGeneratorRepositoryTestImpl implements NumbersGeneratorRepos
     }
 
     @Override
+    public WinningNumbers findWinningNumbersByDate(LocalDateTime date) {
+        return new WinningNumbers(date, database.get(date));
+    }
+
+    @Override
     public List<WinningNumbers> findAll(Sort sort) {
         return null;
     }

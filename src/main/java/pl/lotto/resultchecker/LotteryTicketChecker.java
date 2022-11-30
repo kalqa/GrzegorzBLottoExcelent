@@ -28,4 +28,19 @@ class LotteryTicketChecker {
         }
         return ticketResultDto;
     }
+
+    List<TicketResult> checkAllTicketOnGivenDate(NumbersGeneratorResultDto winningNumbers, List<TicketDto> ticketsFromUsers) {
+        List<TicketResult> ticketResultDto = new ArrayList<>();
+        for (TicketDto ticket : ticketsFromUsers) {
+                    List<Integer> common = ticket.numbers()
+                            .stream()
+                            .filter(winningNumbers.numbers()::contains)
+                            .collect(toList());
+                    ticketResultDto.add(new TicketResult(ticket.uuid(), winningNumbers.drawDate(), winningNumbers.numbers(), ticket.numbers(), common));
+                }
+        return ticketResultDto;
+    }
+
+
+
 }
