@@ -1,18 +1,30 @@
 package pl.lotto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Clock;
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.ContentResultMatchers;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -22,11 +34,8 @@ import pl.lotto.numberreceiver.NumbersInputRepository;
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
 import pl.lotto.numbersgenerator.NumbersGeneratorFacade;
 import pl.lotto.numbersgenerator.dto.NumbersGeneratorResultDto;
-
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.util.List;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = LottoGameApplication.class)
@@ -58,16 +67,44 @@ public class ApplicationRunTest {
 
     @Test
     public void happy_path() throws Exception {
-        // given
+        // STEP 1 user gave numbers
 
+        // given
+        MockHttpServletRequestBuilder postInputNumbers = MockMvcRequestBuilders.post("/inputNumbers");
         // when
-        ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.post("/inputNumbers")
-//                .content(asJsonString(List.of(1, 2, 3, 4, 5, 6)))
-                .content("{\"numbers\": [1,2,3,4,5,6]}")
+        ResultActions resultForInputNumbers = mockMvc.perform(postInputNumbers
+                .content(asJsonString(Map.of("numbers", List.of(1, 2, 3, 4, 5, 6))))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
         // then
-        perform.andExpect(status().isOk());
+        resultForInputNumbers.andExpect(status().isOk());
+        String contentAsString = resultForInputNumbers.andReturn().getResponse().getContentAsString();
+        assertThat(contentAsString).contains("\"drawTime\":\"2022-12-03T12:00:00\"");
+        assertThat(contentAsString).contains("\"userLotteryId\"");
+//        resultForInputNumbers.andExpect(content().json("""
+//                        {
+//                        "drawTime":"2022-12-03T12:00:00",
+//                        "userLotteryId":"e0f3440f-457e-462d-bc16-20a974f0b9d5",
+//                        "error":false,
+//                        "message":"all good"
+//                        }
+//                """.trim()));
+
+        final ObjectMapper mapper = new ObjectMapper();
+        NumberReceiverResultDto numberReceiverResultDto1 = mapper.readValue(contentAsString, NumberReceiverResultDto.class);
+        String id = numberReceiverResultDto1.userLotteryId();
+
+        // STEP 2 user want to know if won before draw date
+        // given
+        MockHttpServletRequestBuilder get = MockMvcRequestBuilders.get("/winners/" + id);
+        // when
+        ResultActions perform = mockMvc.perform(get
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+        // then
+
+
+
 
         NumberReceiverResultDto numberReceiverResultDto = numberReceiverFacade.inputNumbers(List.of(1, 2, 3, 4, 5, 6));
         String userLotteryID = numberReceiverResultDto.userLotteryId();
@@ -82,11 +119,6 @@ public class ApplicationRunTest {
         NumbersGeneratorResultDto NumbersGeneratorResultDto = numbersGeneratorFacade.generateNumbers();
 //        assert NumbersGeneratorResultDto.drawDate().getDayOfWeek() == DayOfWeek.SATURDAY;
         assert NumbersGeneratorResultDto.numbers().size() == 6;
-
-
-
-
-
 
 
     }
